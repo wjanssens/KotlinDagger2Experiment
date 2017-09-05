@@ -1,12 +1,8 @@
 package com.robotsandpencils.kotlindaggerexperiement
 
-import android.app.Activity
-import dagger.Binds
 import dagger.Module
-import dagger.Subcomponent
-import dagger.android.ActivityKey
-import dagger.android.AndroidInjector
-import dagger.multibindings.IntoMap
+import dagger.Provides
+import dagger.android.ContributesAndroidInjector
 import javax.inject.Scope
 
 
@@ -17,17 +13,26 @@ import javax.inject.Scope
 @Scope
 annotation class MainScope
 
-@Module(subcomponents = arrayOf(MainSubComponent::class))
+@Module
 internal abstract class MainModule {
-    @Binds
-    @IntoMap
-    @ActivityKey(MainActivity::class)
-    internal abstract fun bindYourActivityInjectorFactory(builder: MainSubComponent.Builder): AndroidInjector.Factory<out Activity>
+    @MainScope
+    @ContributesAndroidInjector(modules = arrayOf(RepositoryModule::class))
+    abstract fun provideMainActivityInjector(): MainActivity
 }
 
-@MainScope
-@Subcomponent(modules = arrayOf())
-interface MainSubComponent : AndroidInjector<MainActivity> {
-    @Subcomponent.Builder
-    abstract class Builder : AndroidInjector.Builder<MainActivity>()
+
+// This Kotlin file construction seems odd, but follows from this:
+// https://stackoverflow.com/questions/44075860/module-must-be-set
+@Module
+internal abstract class RepositoryModule {
+
+    @Module
+    companion object {
+        @Provides
+        @MainScope
+        @JvmStatic
+        internal fun providesMainRepository(): MainRepository {
+            return MainRepository()
+        }
+    }
 }
