@@ -4,15 +4,13 @@ import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var repository : MainRepository
-
-    val component by lazy { app.component.plus(MainModule(this)) }
+    @Inject lateinit var repository: MainRepository
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -34,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        component.inject(this)
+        AndroidInjection.inject(this)
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
