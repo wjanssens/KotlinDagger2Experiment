@@ -1,11 +1,13 @@
-package com.robotsandpencils.kotlindaggerexperiement
+package com.robotsandpencils.kotlindaggerexperiement.app.modules
 
+import com.robotsandpencils.kotlindaggerexperiement.App
+import com.robotsandpencils.kotlindaggerexperiement.presentation.main.MainModule
 import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 /**
- * Created by nealsanche on 2017-09-05.
+ * Main App Component
  */
 @Singleton
 @Component(modules = arrayOf(AndroidSupportInjectionModule::class, AppModule::class, MainModule::class))

@@ -1,16 +1,16 @@
-package com.robotsandpencils.kotlindaggerexperiement
+package com.robotsandpencils.kotlindaggerexperiement.presentation.main
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
+import android.widget.TextView
+import com.robotsandpencils.kotlindaggerexperiement.R
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
-
-    @Inject lateinit var repository: MainRepository
+class MainActivity : AppCompatActivity(), Contract.View {
+    @Inject lateinit var presenter: Contract.Presenter
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -39,6 +39,16 @@ class MainActivity : AppCompatActivity() {
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-        Log.d("NAS", "Repository: $repository")
+        presenter.attach(this)
+    }
+
+    override fun onDestroy() {
+        presenter.detach()
+        super.onDestroy()
+    }
+
+    override fun setTitle(text: String) {
+        val message: TextView = findViewById(R.id.message)
+        message.text = text
     }
 }
