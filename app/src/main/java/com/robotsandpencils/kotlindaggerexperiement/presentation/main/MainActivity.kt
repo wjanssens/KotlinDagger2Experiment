@@ -1,16 +1,27 @@
 package com.robotsandpencils.kotlindaggerexperiement.presentation.main
 
+import android.arch.lifecycle.LifecycleActivity
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
-import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.widget.TextView
 import com.robotsandpencils.kotlindaggerexperiement.R
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
+import android.arch.lifecycle.ViewModelProviders
+import android.widget.Toast
+import com.robotsandpencils.kotlindaggerexperiement.app.db.User
+import com.xwray.groupie.*
 
-class MainActivity : AppCompatActivity(), Contract.View {
+
+class MainActivity : LifecycleActivity(), Contract.View {
     @Inject lateinit var presenter: Contract.Presenter
+
+    private val groupAdapter = GroupAdapter<ViewHolder>()
+    private val updatingGroup = UpdatingGroup()
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -40,6 +51,60 @@ class MainActivity : AppCompatActivity(), Contract.View {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         presenter.attach(this)
+
+        connectView()
+    }
+
+    private fun connectView() {
+        connectButton()
+        connectRecyclerView()
+    }
+
+    private fun connectButton() {
+        button.setOnClickListener { _ ->
+            Log.d("Button", "${idNumber.text} ${firstName.text} ${lastName.text}");
+
+            // Tell the presenter to perform the database insert
+            presenter.addUser(idNumber.text.toString(), firstName.text.toString(), lastName.text.toString())
+        }
+    }
+
+    private fun connectRecyclerView() {
+        list.layoutManager = LinearLayoutManager(this)
+        list.adapter = groupAdapter
+
+        groupAdapter.add(updatingGroup)
+
+        getViewModel().users.observe(this, Observer { users ->
+            Log.d("USERS", "Got some users: $users thread =  ${Thread.currentThread().name}")
+
+            updatingGroup.update(getUserItems(users))
+        })
+
+        groupAdapter.apply {
+            setOnItemClickListener({ item, view -> presenter.removeUser((item as UserItem).user) })
+        }
+    }
+
+    override fun showError(message: String?) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
+    private fun getUserItems(users: List<User>?): List<out Item<ViewHolder>> {
+        val items = ArrayList<UserItem>()
+
+        users?.forEach { user ->
+            items.add(UserItem(user))
+        }
+
+        return items
+    }
+
+    override fun clearFields() {
+        idNumber.requestFocus()
+        idNumber.text.clear()
+        firstName.text.clear()
+        lastName.text.clear()
     }
 
     override fun onDestroy() {
@@ -50,5 +115,9 @@ class MainActivity : AppCompatActivity(), Contract.View {
     override fun setTitle(text: String) {
         val message: TextView = findViewById(R.id.message)
         message.text = text
+    }
+
+    override fun getViewModel(): MainViewModel {
+        return ViewModelProviders.of(this).get(MainViewModel::class.java)
     }
 }

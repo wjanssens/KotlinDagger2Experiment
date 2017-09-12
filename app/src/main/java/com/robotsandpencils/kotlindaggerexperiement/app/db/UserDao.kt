@@ -1,22 +1,18 @@
 package com.robotsandpencils.kotlindaggerexperiement.app.db
 
+import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Query
 import android.arch.persistence.room.Delete
 import android.arch.persistence.room.Insert
-
-
-/**
- * Created by nealsanche on 2017-09-08.
- */
+import android.arch.persistence.room.Query
 
 @Dao
 interface UserDao {
     @Query("SELECT * FROM user")
-    fun getAll() : List<User>
+    fun getAll(): LiveData<List<User>>
 
     @Query("SELECT * FROM user WHERE uid IN (:userIds)")
-    fun loadAllByIds(userIds : IntArray): List<User>
+    fun loadAllByIds(userIds: IntArray): List<User>
 
     @Query("SELECT * FROM user WHERE first_name LIKE :first AND " + "last_name LIKE :last LIMIT 1")
     fun findByName(first: String, last: String): User
