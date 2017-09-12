@@ -82,7 +82,7 @@ class MainActivity : LifecycleActivity(), Contract.View {
         })
 
         groupAdapter.apply {
-            setOnItemClickListener({ item, view -> presenter.removeUser((item as UserItem).user) })
+            setOnItemClickListener({ item, _ -> presenter.removeUser((item as UserItem).user) })
         }
     }
 

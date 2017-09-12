@@ -3,8 +3,10 @@ package com.robotsandpencils.kotlindaggerexperiement.presentation.main
 import android.util.Log
 import com.robotsandpencils.kotlindaggerexperiement.app.db.User
 import com.robotsandpencils.kotlindaggerexperiement.app.repositories.MainRepository
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.run
 
 /**
  * A super simple presenter
@@ -27,35 +29,34 @@ class Presenter(val mainRepository: MainRepository) : Contract.Presenter {
     }
 
     override fun addUser(id: String, firstName: String, lastName: String) {
-
-        // So, looked around for a nice way to do something in the background and could have
-        // used RxJava here, but decided just to use Anko's doAsync DSL. It's actually simple,
-        // allows exception handling, and allows hoisting something back onto the UI thread on
-        // success. Sort of a nice, simple way to do database work, actually.
-
-        doAsync(task = {
+        // Use Coroutines to rn this in the background and then do something on the UI
+        // thread if successful.
+        val deferred = async(CommonPool) {
             mainRepository.getUserDao().insertAll(User(id.toInt(), firstName, lastName))
-            uiThread {
+            run(UI) {
                 view.setTitle("Record Added")
                 view.clearFields()
             }
-        }, exceptionHandler = { exception ->
-            Log.e("DB", "Unable to save: ${Thread.currentThread().name}", exception)
+        }
 
-            // Looks like the errors come out on the pool thread, so we can redirect to the UI
-            // thread with another async block, or find a better way.
-            doAsync {
-                uiThread {
-                    view.showError(exception.message)
+        // This will be called back when done, and if there is an error, throwable will be set
+        deferred.invokeOnCompletion { throwable ->
+            if (throwable != null) {
+                Log.e("DB", "Unable to save: ${Thread.currentThread().name}", throwable)
+
+                async(CommonPool) {
+                    run(UI) {
+                        view.showError(throwable.message)
+                    }
                 }
             }
-        })
+        }
     }
 
     override fun removeUser(user: User) {
-        doAsync {
+        async(CommonPool) {
             mainRepository.getUserDao().delete(user)
-            uiThread {
+            run(UI) {
                 view.setTitle("Record Deleted")
             }
         }
