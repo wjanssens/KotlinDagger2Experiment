@@ -62,7 +62,7 @@ class MainActivity : LifecycleActivity(), Contract.View {
 
     private fun connectButton() {
         button.setOnClickListener { _ ->
-            Log.d("Button", "${idNumber.text} ${firstName.text} ${lastName.text}");
+            Log.d("Button", "${idNumber.text} ${firstName.text} ${lastName.text}")
 
             // Tell the presenter to perform the database insert
             presenter.addUser(idNumber.text.toString(), firstName.text.toString(), lastName.text.toString())
@@ -82,7 +82,10 @@ class MainActivity : LifecycleActivity(), Contract.View {
         })
 
         groupAdapter.apply {
-            setOnItemClickListener({ item, _ -> presenter.removeUser((item as UserItem).user) })
+            setOnItemClickListener {
+                item, _ ->
+                presenter.removeUser((item as UserItem).user)
+            }
         }
     }
 
@@ -90,7 +93,7 @@ class MainActivity : LifecycleActivity(), Contract.View {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
-    private fun getUserItems(users: List<User>?): List<out Item<ViewHolder>> {
+    private fun getUserItems(users: List<User>?): List<Item<ViewHolder>> {
         val items = ArrayList<UserItem>()
 
         users?.forEach { user ->

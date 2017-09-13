@@ -13,10 +13,10 @@ class UserItem(internal val user: User) : Item<ViewHolder>(user.uid.toLong()) {
     }
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        val view = viewHolder.itemView
-
-        view.firstName.text = user.firstName
-        view.lastName.text = user.lastName
-        view.idNumber.text = user.uid.toString()
+        viewHolder.itemView.apply {
+            firstName.text = user.firstName
+            lastName.text = user.lastName
+            idNumber.text = user.uid.toString()
+        }
     }
 }
