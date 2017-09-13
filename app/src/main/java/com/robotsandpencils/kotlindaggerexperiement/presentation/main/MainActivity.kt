@@ -2,19 +2,21 @@ package com.robotsandpencils.kotlindaggerexperiement.presentation.main
 
 import android.arch.lifecycle.LifecycleActivity
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
-import android.widget.TextView
+import android.widget.Toast
 import com.robotsandpencils.kotlindaggerexperiement.R
+import com.robotsandpencils.kotlindaggerexperiement.app.db.User
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.Item
+import com.xwray.groupie.UpdatingGroup
+import com.xwray.groupie.ViewHolder
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
-import android.arch.lifecycle.ViewModelProviders
-import android.widget.Toast
-import com.robotsandpencils.kotlindaggerexperiement.app.db.User
-import com.xwray.groupie.*
 
 
 class MainActivity : LifecycleActivity(), Contract.View {
@@ -82,8 +84,7 @@ class MainActivity : LifecycleActivity(), Contract.View {
         })
 
         groupAdapter.apply {
-            setOnItemClickListener {
-                item, _ ->
+            setOnItemClickListener { item, _ ->
                 presenter.removeUser((item as UserItem).user)
             }
         }
@@ -116,7 +117,6 @@ class MainActivity : LifecycleActivity(), Contract.View {
     }
 
     override fun setTitle(text: String) {
-        val message: TextView = findViewById(R.id.message)
         message.text = text
     }
 
