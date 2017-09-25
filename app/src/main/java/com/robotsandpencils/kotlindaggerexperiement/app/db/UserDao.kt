@@ -8,6 +8,10 @@ import android.arch.persistence.room.Query
 
 @Dao
 interface UserDao {
+
+    @Query("SELECT count(*) FROM user")
+    fun getCount(): LiveData<Int>
+
     @Query("SELECT * FROM user")
     fun getAll(): LiveData<List<User>>
 
