@@ -1,7 +1,7 @@
 package com.robotsandpencils.kotlindaggerexperiement.app.modules
 
 import com.robotsandpencils.kotlindaggerexperiement.App
-import com.robotsandpencils.kotlindaggerexperiement.presentation.main.MainModule
+import com.robotsandpencils.kotlindaggerexperiement.presentation.main.module.MainModule
 import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton

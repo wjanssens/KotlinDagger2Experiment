@@ -1,29 +1,10 @@
-package com.robotsandpencils.kotlindaggerexperiement.presentation.main
+package com.robotsandpencils.kotlindaggerexperiement.presentation.main.module
 
 import com.robotsandpencils.kotlindaggerexperiement.app.repositories.MainRepository
+import com.robotsandpencils.kotlindaggerexperiement.presentation.main.Contract
+import com.robotsandpencils.kotlindaggerexperiement.presentation.main.Presenter
 import dagger.Module
 import dagger.Provides
-import dagger.android.ContributesAndroidInjector
-import javax.inject.Scope
-
-
-/**
- * Main Module boilerplate.
- */
-
-// New scope for component
-@Scope
-annotation class MainScope
-
-// Main Module: Uses ContributesAndroidInjector to generate a component and builder automatically.
-// Using this to provide a presenter module for this scope.
-@Module
-internal abstract class MainModule {
-    @MainScope
-    @ContributesAndroidInjector(modules = arrayOf(PresenterModule::class))
-    abstract fun provideMainActivityInjector(): MainActivity
-}
-
 
 // This Kotlin file construction seems odd, but follows from this:
 // https://stackoverflow.com/questions/44075860/module-must-be-set
