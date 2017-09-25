@@ -1,6 +1,8 @@
 package com.robotsandpencils.kotlindaggerexperiement.presentation.main.module
 
+import com.github.ajalt.timberkt.e
 import com.robotsandpencils.kotlindaggerexperiement.app.repositories.MainRepository
+import com.robotsandpencils.kotlindaggerexperiement.presentation.base.UiThreadQueue
 import com.robotsandpencils.kotlindaggerexperiement.presentation.main.Contract
 import com.robotsandpencils.kotlindaggerexperiement.presentation.main.Presenter
 import dagger.Module
@@ -20,7 +22,10 @@ internal abstract class PresenterModule {
         @Provides
         @MainScope
         @JvmStatic internal fun providesPresenter(mainRepository: MainRepository): Contract.Presenter {
-            return Presenter(mainRepository)
+
+            e { Thread.currentThread().name }
+
+            return Presenter(mainRepository, UiThreadQueue())
         }
     }
 }

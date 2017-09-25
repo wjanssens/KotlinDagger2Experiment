@@ -8,8 +8,8 @@ import com.robotsandpencils.kotlindaggerexperiement.app.modules.DaggerAppCompone
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
+import timber.log.Timber
 import javax.inject.Inject
-
 
 /**
  * App
@@ -30,6 +30,10 @@ class App : Application(), HasActivityInjector {
     override fun onCreate() {
         super.onCreate()
         component.inject(this)
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
     }
 
     override fun activityInjector(): AndroidInjector<Activity> {

@@ -1,8 +1,11 @@
 package com.robotsandpencils.kotlindaggerexperiement.presentation.main
 
 import android.util.Log
+import com.github.ajalt.timberkt.e
 import com.robotsandpencils.kotlindaggerexperiement.app.db.User
 import com.robotsandpencils.kotlindaggerexperiement.app.repositories.MainRepository
+import com.robotsandpencils.kotlindaggerexperiement.presentation.base.BasePresenter
+import com.robotsandpencils.kotlindaggerexperiement.presentation.base.UiThreadQueue
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
@@ -12,20 +15,16 @@ import kotlinx.coroutines.experimental.run
  * A super simple presenter
  */
 
-class Presenter(private val mainRepository: MainRepository) : Contract.Presenter {
-
-    private lateinit var view: Contract.View
+class Presenter(private val mainRepository: MainRepository, uiThreadQueue: UiThreadQueue) :
+        BasePresenter<Contract.View>(uiThreadQueue), Contract.Presenter {
 
     override fun attach(view: Contract.View) {
-        this.view = view
+        super.attach(view)
+
         view.setTitle("Presenter Attached")
 
         val viewModel = view.getViewModel()
         viewModel.users = mainRepository.getUserDao().getAll()
-    }
-
-    override fun detach() {
-        // Nothing to do here
     }
 
     override fun addUser(id: String, firstName: String, lastName: String) {
@@ -34,8 +33,11 @@ class Presenter(private val mainRepository: MainRepository) : Contract.Presenter
         val deferred = async(CommonPool) {
             mainRepository.getUserDao().insertAll(User(id.toInt(), firstName, lastName))
             run(UI) {
-                view.setTitle("Record Added")
-                view.clearFields()
+                uiThreadQueue.run {
+                    e { Thread.currentThread().name }
+                    view?.setTitle("Record Added")
+                    view?.clearFields()
+                }
             }
         }
 
@@ -46,7 +48,9 @@ class Presenter(private val mainRepository: MainRepository) : Contract.Presenter
 
                 async(CommonPool) {
                     run(UI) {
-                        view.showError(throwable.message)
+                        uiThreadQueue.run {
+                            view?.showError(throwable.message)
+                        }
                     }
                 }
             }
@@ -56,8 +60,11 @@ class Presenter(private val mainRepository: MainRepository) : Contract.Presenter
     override fun removeUser(user: User) {
         async(CommonPool) {
             mainRepository.getUserDao().delete(user)
+
             run(UI) {
-                view.setTitle("Record Deleted")
+                uiThreadQueue.run {
+                    view?.setTitle("Record Deleted")
+                }
             }
         }
     }
