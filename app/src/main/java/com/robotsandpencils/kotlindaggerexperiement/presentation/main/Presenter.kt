@@ -1,7 +1,6 @@
 package com.robotsandpencils.kotlindaggerexperiement.presentation.main
 
 import android.util.Log
-import com.github.ajalt.timberkt.e
 import com.robotsandpencils.kotlindaggerexperiement.app.db.User
 import com.robotsandpencils.kotlindaggerexperiement.app.repositories.MainRepository
 import com.robotsandpencils.kotlindaggerexperiement.presentation.base.BasePresenter
@@ -34,7 +33,6 @@ class Presenter(private val mainRepository: MainRepository, uiThreadQueue: UiThr
             mainRepository.getUserDao().insertAll(User(id.toInt(), firstName, lastName))
             run(UI) {
                 uiThreadQueue.run {
-                    e { Thread.currentThread().name }
                     view?.setTitle("Record Added")
                     view?.clearFields()
                 }
