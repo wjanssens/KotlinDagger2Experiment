@@ -1,10 +1,10 @@
 package com.robotsandpencils.kotlindaggerexperiement.presentation.main
 
-import android.arch.lifecycle.LifecycleActivity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.widget.Toast
@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 
-class MainActivity : LifecycleActivity(), Contract.View {
+class MainActivity : AppCompatActivity(), Contract.View {
     @Inject lateinit var presenter: Contract.Presenter
 
     private val groupAdapter = GroupAdapter<ViewHolder>()
@@ -106,9 +106,8 @@ class MainActivity : LifecycleActivity(), Contract.View {
 
     override fun clearFields() {
         idNumber.requestFocus()
-        idNumber.text.clear()
-        firstName.text.clear()
-        lastName.text.clear()
+        arrayOf(idNumber.text, firstName.text, lastName.text)
+                .forEach { it.clear() }
     }
 
     override fun onDestroy() {
