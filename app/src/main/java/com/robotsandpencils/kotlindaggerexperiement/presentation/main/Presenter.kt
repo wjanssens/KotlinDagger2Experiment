@@ -6,9 +6,7 @@ import com.robotsandpencils.kotlindaggerexperiement.app.repositories.MainReposit
 import com.robotsandpencils.kotlindaggerexperiement.presentation.base.BasePresenter
 import com.robotsandpencils.kotlindaggerexperiement.presentation.base.UiThreadQueue
 import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.run
 
 /**
  * A super simple presenter
@@ -31,12 +29,10 @@ class Presenter(private val mainRepository: MainRepository, uiThreadQueue: UiThr
         // thread if successful.
         val deferred = async(CommonPool) {
             mainRepository.getUserDao().insertAll(User(id.toInt(), firstName, lastName))
-            run(UI) {
-                uiThreadQueue.run {
-                    view?.setTitle("Record Added")
-                    view?.clearFields()
-                }
-            }
+            uiThreadQueue.run(Runnable {
+                view?.setTitle("Record Added")
+                view?.clearFields()
+            })
         }
 
         // This will be called back when done, and if there is an error, throwable will be set
@@ -44,13 +40,9 @@ class Presenter(private val mainRepository: MainRepository, uiThreadQueue: UiThr
             if (throwable != null) {
                 Log.e("DB", "Unable to save: ${Thread.currentThread().name}", throwable)
 
-                async(CommonPool) {
-                    run(UI) {
-                        uiThreadQueue.run {
-                            view?.showError(throwable.message)
-                        }
-                    }
-                }
+                uiThreadQueue.run(Runnable {
+                    view?.showError(throwable.message)
+                })
             }
         }
     }
@@ -59,11 +51,9 @@ class Presenter(private val mainRepository: MainRepository, uiThreadQueue: UiThr
         async(CommonPool) {
             mainRepository.getUserDao().delete(user)
 
-            run(UI) {
-                uiThreadQueue.run {
-                    view?.setTitle("Record Deleted")
-                }
-            }
+            uiThreadQueue.run(Runnable {
+                view?.setTitle("Record Deleted")
+            })
         }
     }
 }
