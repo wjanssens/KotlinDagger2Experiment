@@ -12,12 +12,12 @@ import kotlinx.coroutines.experimental.run
  * A super simple presenter
  */
 
-class Presenter(val mainRepository: MainRepository) : Contract.Presenter {
+class Presenter(private val mainRepository: MainRepository) : Contract.Presenter {
 
     private lateinit var view: Contract.View
 
     override fun attach(view: Contract.View) {
-        this.view = view;
+        this.view = view
         view.setTitle("Presenter Attached")
 
         val viewModel = view.getViewModel()
