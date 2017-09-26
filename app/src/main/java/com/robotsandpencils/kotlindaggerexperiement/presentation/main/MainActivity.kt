@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.robotsandpencils.kotlindaggerexperiement.R
 import com.robotsandpencils.kotlindaggerexperiement.app.db.User
@@ -20,27 +21,20 @@ import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity(), Contract.View {
+
+    companion object {
+        val CURRENT_TAB_ITEM: String = "CurrentTabItem"
+    }
+
     @Inject lateinit var presenter: Contract.Presenter
 
     private val groupAdapter = GroupAdapter<ViewHolder>()
     private val updatingGroup = UpdatingGroup()
+    private var currentTabItem: Int = R.id.navigation_home
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.navigation_home -> {
-                message.setText(R.string.title_home)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_dashboard -> {
-                message.setText(R.string.title_dashboard)
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_notifications -> {
-                message.setText(R.string.title_notifications)
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        false
+        currentTabItem = item.itemId
+        return@OnNavigationItemSelectedListener presenter.navigate(item.itemId)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,11 +44,25 @@ class MainActivity : AppCompatActivity(), Contract.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-
         presenter.attach(this)
 
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+        if (savedInstanceState != null) {
+            currentTabItem = savedInstanceState.getInt(CURRENT_TAB_ITEM)
+            navigation.selectedItemId = currentTabItem
+        } else {
+            showHome()
+            hideDashboard()
+            hideNotifications()
+        }
+
         connectView()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putInt(CURRENT_TAB_ITEM, currentTabItem)
     }
 
     private fun connectView() {
@@ -119,7 +127,35 @@ class MainActivity : AppCompatActivity(), Contract.View {
         message.text = text
     }
 
+    override fun setTitle(text: Int) {
+        message.text = getString(text)
+    }
+
     override fun getViewModel(): MainViewModel {
         return ViewModelProviders.of(this).get(MainViewModel::class.java)
+    }
+
+    override fun showHome() {
+        homeLayout.visibility = View.VISIBLE
+    }
+
+    override fun showDashboard() {
+        dashboardLayout.visibility = View.VISIBLE
+    }
+
+    override fun showNotifications() {
+        notificationsLayout.visibility = View.VISIBLE
+    }
+
+    override fun hideHome() {
+        homeLayout.visibility = View.GONE
+    }
+
+    override fun hideDashboard() {
+        dashboardLayout.visibility = View.GONE
+    }
+
+    override fun hideNotifications() {
+        notificationsLayout.visibility = View.GONE
     }
 }

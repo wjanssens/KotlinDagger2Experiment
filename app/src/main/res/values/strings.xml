@@ -7,4 +7,6 @@
     <string name="firstname">Firstname</string>
     <string name="lastname">Lastname</string>
     <string name="add">Add</string>
+    <string name="comic">Comic</string>
+    <string name="previous_comic">Previous Comic</string>
 </resources>

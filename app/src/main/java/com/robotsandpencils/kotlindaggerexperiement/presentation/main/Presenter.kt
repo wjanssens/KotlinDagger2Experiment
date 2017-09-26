@@ -1,6 +1,7 @@
 package com.robotsandpencils.kotlindaggerexperiement.presentation.main
 
 import android.util.Log
+import com.robotsandpencils.kotlindaggerexperiement.R
 import com.robotsandpencils.kotlindaggerexperiement.app.db.User
 import com.robotsandpencils.kotlindaggerexperiement.app.repositories.MainRepository
 import com.robotsandpencils.kotlindaggerexperiement.presentation.base.BasePresenter
@@ -55,5 +56,32 @@ class Presenter(private val mainRepository: MainRepository, uiThreadQueue: UiThr
                 view?.setTitle("Record Deleted")
             })
         }
+    }
+
+    override fun navigate(id: Int): Boolean {
+        when (id) {
+            R.id.navigation_home -> {
+                view?.setTitle(R.string.title_home)
+                view?.showHome()
+                view?.hideDashboard()
+                view?.hideNotifications()
+                return true
+            }
+            R.id.navigation_dashboard -> {
+                view?.setTitle(R.string.title_dashboard)
+                view?.hideHome()
+                view?.showDashboard()
+                view?.hideNotifications()
+                return true
+            }
+            R.id.navigation_notifications -> {
+                view?.setTitle(R.string.title_notifications)
+                view?.hideHome()
+                view?.hideDashboard()
+                view?.showNotifications()
+                return true
+            }
+        }
+        return false
     }
 }
