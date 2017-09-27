@@ -6,5 +6,5 @@ import android.arch.lifecycle.ViewModel
 class ComicViewModel : ViewModel() {
     val title: MutableLiveData<String> = MutableLiveData()
     val imageUrl: MutableLiveData<String> = MutableLiveData()
-    var num: MutableLiveData<Int> = MutableLiveData()
+    val num: MutableLiveData<Int> = MutableLiveData()
 }

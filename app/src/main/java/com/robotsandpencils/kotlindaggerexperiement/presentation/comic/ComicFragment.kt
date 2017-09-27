@@ -37,8 +37,7 @@ class ComicFragment : Fragment(), Contract.View {
 
         getViewModel().imageUrl.observe(this, Observer { url ->
             // Load the image URL
-            val image = imageView
-            Glide.with(this).load(url).into(image)
+            Glide.with(this).load(url).into(imageView)
         })
 
         getViewModel().title.observe(this, Observer { title ->
