@@ -15,7 +15,7 @@ internal abstract class PresenterModule {
     @Module
     companion object {
         @Provides
-        @MainScope
+        @Scope
         @JvmStatic internal fun providesPresenter(activity: MainActivity, mainRepository: MainRepository): Contract.Presenter {
             return Presenter(mainRepository, LifecycleAwareUiThreadQueue(activity))
         }

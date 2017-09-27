@@ -4,4 +4,4 @@ import javax.inject.Scope
 
 // New scope for component
 @Scope
-annotation class MainScope
+annotation class Scope

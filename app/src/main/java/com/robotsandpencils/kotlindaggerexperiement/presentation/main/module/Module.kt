@@ -7,8 +7,8 @@ import dagger.android.ContributesAndroidInjector
 // Main Module: Uses ContributesAndroidInjector to generate a component and builder automatically.
 // Using this to provide a presenter module for this scope.
 @Module
-internal abstract class MainModule {
-    @MainScope
+internal abstract class Module {
+    @Scope
     @ContributesAndroidInjector(modules = arrayOf(PresenterModule::class))
     abstract fun provideMainActivityInjector(): MainActivity
 }
