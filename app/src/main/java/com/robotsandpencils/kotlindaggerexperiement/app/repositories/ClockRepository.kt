@@ -14,7 +14,7 @@ class ClockRepository {
 
     fun getTrad(): Flowable<String> {
         return Single.fromCallable({
-            SimpleDateFormat("HH:mm").format(System.currentTimeMillis())
+            SimpleDateFormat("HH:mm:ss").format(System.currentTimeMillis())
         }).delay(250, TimeUnit.MILLISECONDS).repeat()
     }
 
