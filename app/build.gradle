@@ -8,7 +8,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.robotsandpencils.kotlindaggerexperiement"
         minSdkVersion 21
@@ -67,11 +67,7 @@ dependencies {
     // Architecture Components
     implementation "android.arch.lifecycle:runtime:$archVersion"
     implementation "android.arch.lifecycle:extensions:$archVersionA"
-    implementation "android.arch.persistence.room:runtime:$archVersionA"
-    implementation "android.arch.persistence.room:rxjava2:$archVersionA"
     kapt "android.arch.lifecycle:compiler:$archVersionA"
-    kapt "android.arch.persistence.room:compiler:$archVersionA"
-    testImplementation "android.arch.persistence.room:testing:$archVersionA"
 
     // Groupie
     implementation "com.xwray:groupie:$groupieVersion"

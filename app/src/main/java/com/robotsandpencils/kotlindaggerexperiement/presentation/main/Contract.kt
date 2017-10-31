@@ -1,7 +1,6 @@
 package com.robotsandpencils.kotlindaggerexperiement.presentation.main
 
 import android.support.annotation.StringRes
-import com.robotsandpencils.kotlindaggerexperiement.app.db.User
 
 /**
  * Main Contract
@@ -14,8 +13,6 @@ interface Contract {
     interface Presenter {
         fun attach(view: View)
         fun detach()
-        fun addUser(id: String, firstName: String, lastName: String)
-        fun removeUser(user: User)
         fun navigate(id: Int): Boolean
     }
 
@@ -30,11 +27,11 @@ interface Contract {
         fun showError(message: String?)
 
         fun showHome()
-        fun showDashboard()
-        fun showNotifications()
+        fun showComic()
+        fun showClock()
 
         fun hideHome()
-        fun hideDashboard()
-        fun hideNotifications()
+        fun hideComic()
+        fun hideClock()
     }
 }

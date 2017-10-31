@@ -1,6 +1,5 @@
 package com.robotsandpencils.kotlindaggerexperiement.presentation.main
 
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
@@ -10,9 +9,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.robotsandpencils.kotlindaggerexperiement.R
-import com.robotsandpencils.kotlindaggerexperiement.app.db.User
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.Item
 import com.xwray.groupie.UpdatingGroup
 import com.xwray.groupie.ViewHolder
 import dagger.android.AndroidInjection
@@ -53,8 +50,8 @@ class MainActivity : AppCompatActivity(), Contract.View {
             navigation.selectedItemId = currentTabItem
         } else {
             showHome()
-            hideDashboard()
-            hideNotifications()
+            hideComic()
+            hideClock()
         }
 
         connectView()
@@ -73,9 +70,6 @@ class MainActivity : AppCompatActivity(), Contract.View {
     private fun connectButton() {
         button.setOnClickListener { _ ->
             Log.d("Button", "${idNumber.text} ${firstName.text} ${lastName.text}")
-
-            // Tell the presenter to perform the database insert
-            presenter.addUser(idNumber.text.toString(), firstName.text.toString(), lastName.text.toString())
         }
     }
 
@@ -85,31 +79,14 @@ class MainActivity : AppCompatActivity(), Contract.View {
 
         groupAdapter.add(updatingGroup)
 
-        getViewModel().users.observe(this, Observer { users ->
-            Log.d("USERS", "Got some users: $users thread =  ${Thread.currentThread().name}")
-
-            updatingGroup.update(getUserItems(users))
-        })
-
         groupAdapter.apply {
             setOnItemClickListener { item, _ ->
-                presenter.removeUser((item as UserItem).user)
             }
         }
     }
 
     override fun showError(message: String?) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-    }
-
-    private fun getUserItems(users: List<User>?): List<Item<ViewHolder>> {
-        val items = ArrayList<UserItem>()
-
-        users?.forEach { user ->
-            items.add(UserItem(user))
-        }
-
-        return items
     }
 
     override fun clearFields() {
@@ -138,24 +115,22 @@ class MainActivity : AppCompatActivity(), Contract.View {
     override fun showHome() {
         homeLayout.visibility = View.VISIBLE
     }
-
-    override fun showDashboard() {
-        dashboardLayout.visibility = View.VISIBLE
-    }
-
-    override fun showNotifications() {
-        notificationsLayout.visibility = View.VISIBLE
-    }
-
     override fun hideHome() {
         homeLayout.visibility = View.GONE
     }
 
-    override fun hideDashboard() {
-        dashboardLayout.visibility = View.GONE
+
+    override fun showComic() {
+        comicLayout.visibility = View.VISIBLE
+    }
+    override fun hideComic() {
+        comicLayout.visibility = View.GONE
     }
 
-    override fun hideNotifications() {
-        notificationsLayout.visibility = View.GONE
+    override fun showClock() {
+        clockLayout.visibility = View.VISIBLE
+    }
+    override fun hideClock() {
+        clockLayout.visibility = View.GONE
     }
 }

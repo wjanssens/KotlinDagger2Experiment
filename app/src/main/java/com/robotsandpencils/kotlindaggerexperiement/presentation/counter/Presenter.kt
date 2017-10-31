@@ -1,16 +1,18 @@
 package com.robotsandpencils.kotlindaggerexperiement.presentation.counter
 
-import com.robotsandpencils.kotlindaggerexperiement.app.repositories.MainRepository
 import com.robotsandpencils.kotlindaggerexperiement.presentation.base.BasePresenter
 import com.robotsandpencils.kotlindaggerexperiement.presentation.base.UiThreadQueue
 
-class Presenter(private val mainRepository: MainRepository, uiThreadQueue: UiThreadQueue) :
+class Presenter(uiThreadQueue: UiThreadQueue) :
         BasePresenter<Contract.View>(uiThreadQueue), Contract.Presenter {
 
     override fun attach(view: Contract.View) {
         super.attach(view)
 
         val viewModel = view.getViewModel()
-        viewModel.count = mainRepository.getUserDao().getCount()
+        viewModel.apply {
+            count.value = 0
+        }
+//        viewModel.count = xkcdRepository.getUserDao().getCount()
     }
 }

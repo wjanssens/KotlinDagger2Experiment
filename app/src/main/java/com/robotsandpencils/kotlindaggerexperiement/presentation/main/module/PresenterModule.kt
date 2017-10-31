@@ -1,6 +1,6 @@
 package com.robotsandpencils.kotlindaggerexperiement.presentation.main.module
 
-import com.robotsandpencils.kotlindaggerexperiement.app.repositories.MainRepository
+import com.robotsandpencils.kotlindaggerexperiement.app.repositories.XkcdRepository
 import com.robotsandpencils.kotlindaggerexperiement.presentation.base.LifecycleAwareUiThreadQueue
 import com.robotsandpencils.kotlindaggerexperiement.presentation.main.Contract
 import com.robotsandpencils.kotlindaggerexperiement.presentation.main.MainActivity
@@ -16,8 +16,8 @@ internal abstract class PresenterModule {
     companion object {
         @Provides
         @Scope
-        @JvmStatic internal fun providesPresenter(activity: MainActivity, mainRepository: MainRepository): Contract.Presenter {
-            return Presenter(mainRepository, LifecycleAwareUiThreadQueue(activity))
+        @JvmStatic internal fun providesPresenter(activity: MainActivity): Contract.Presenter {
+            return Presenter(LifecycleAwareUiThreadQueue(activity))
         }
     }
 }
