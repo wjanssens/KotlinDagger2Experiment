@@ -29,9 +29,11 @@ interface Contract {
         fun showHome()
         fun showComic()
         fun showClock()
+        fun showEvent()
 
         fun hideHome()
         fun hideComic()
         fun hideClock()
+        fun hideEvent()
     }
 }

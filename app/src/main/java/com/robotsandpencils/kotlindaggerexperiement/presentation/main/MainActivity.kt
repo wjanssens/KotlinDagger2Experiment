@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity(), Contract.View {
             showHome()
             hideComic()
             hideClock()
+            hideEvent()
         }
 
         connectView()
@@ -132,5 +133,12 @@ class MainActivity : AppCompatActivity(), Contract.View {
     }
     override fun hideClock() {
         clockLayout.visibility = View.GONE
+    }
+
+    override fun showEvent() {
+        eventLayout.visibility = View.VISIBLE
+    }
+    override fun hideEvent() {
+        eventLayout.visibility = View.GONE
     }
 }

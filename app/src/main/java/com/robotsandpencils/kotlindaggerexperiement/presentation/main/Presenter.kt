@@ -26,6 +26,7 @@ class Presenter(uiThreadQueue: UiThreadQueue) :
                 view?.showHome()
                 view?.hideComic()
                 view?.hideClock()
+                view?.hideEvent()
                 return true
             }
             R.id.navigation_comic -> {
@@ -33,6 +34,7 @@ class Presenter(uiThreadQueue: UiThreadQueue) :
                 view?.hideHome()
                 view?.showComic()
                 view?.hideClock()
+                view?.hideEvent()
                 return true
             }
             R.id.navigation_clock -> {
@@ -40,6 +42,15 @@ class Presenter(uiThreadQueue: UiThreadQueue) :
                 view?.hideHome()
                 view?.hideComic()
                 view?.showClock()
+                view?.hideEvent()
+                return true
+            }
+            R.id.navigation_event -> {
+                view?.setTitle(R.string.title_event)
+                view?.hideHome()
+                view?.hideComic()
+                view?.hideClock()
+                view?.showEvent()
                 return true
             }
         }

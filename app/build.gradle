@@ -69,6 +69,12 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$archVersionA"
     kapt "android.arch.lifecycle:compiler:$archVersionA"
 
+    // Room
+    implementation "android.arch.persistence.room:runtime:$archVersionA"
+    implementation "android.arch.persistence.room:rxjava2:$archVersionA"
+    testImplementation "android.arch.persistence.room:testing:$archVersionA"
+    kapt "android.arch.persistence.room:compiler:$archVersionA"
+
     // Groupie
     implementation "com.xwray:groupie:$groupieVersion"
 

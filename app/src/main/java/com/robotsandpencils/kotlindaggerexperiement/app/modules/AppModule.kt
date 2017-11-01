@@ -1,7 +1,10 @@
 package com.robotsandpencils.kotlindaggerexperiement.app.modules
 
+import android.arch.persistence.room.Room
 import com.robotsandpencils.kotlindaggerexperiement.App
+import com.robotsandpencils.kotlindaggerexperiement.app.db.AppDatabase
 import com.robotsandpencils.kotlindaggerexperiement.app.repositories.ClockRepository
+import com.robotsandpencils.kotlindaggerexperiement.app.repositories.EventRepository
 import com.robotsandpencils.kotlindaggerexperiement.app.repositories.XkcdRepository
 import com.robotsandpencils.kotlindaggerexperiement.net.xkcd.XkcdAPI
 import dagger.Module
@@ -19,11 +22,21 @@ class AppModule(val app: App) {
 
     @Provides
     @Singleton
+    fun provideDatabase(app: App): AppDatabase {
+        return Room.databaseBuilder(app, AppDatabase::class.java, "database-name").build()
+    }
+
+    @Provides
+    @Singleton
     fun provideClockRepository() = ClockRepository()
 
     @Provides
     @Singleton
     fun provideXkcdRepository(api: XkcdAPI) = XkcdRepository(api)
+
+    @Provides
+    @Singleton
+    fun providerEventRepository(db: AppDatabase) = EventRepository(db)
 
     @Provides
     @Singleton

@@ -13,7 +13,8 @@ import javax.inject.Singleton
         com.robotsandpencils.kotlindaggerexperiement.presentation.main.module.Module::class,
         com.robotsandpencils.kotlindaggerexperiement.presentation.counter.module.Module::class,
         com.robotsandpencils.kotlindaggerexperiement.presentation.comic.module.Module::class,
-        com.robotsandpencils.kotlindaggerexperiement.presentation.clock.module.Module::class))
+        com.robotsandpencils.kotlindaggerexperiement.presentation.clock.module.Module::class,
+        com.robotsandpencils.kotlindaggerexperiement.presentation.event.module.Module::class))
 interface AppComponent {
     fun inject(app: App)
 }
